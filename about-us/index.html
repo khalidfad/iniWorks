@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — IniWorks Ltd</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:       #0d5c54;
+      --teal-dark:  #094740;
+      --teal-light: #1a7a70;
+      --off-white:  #f4f3f0;
+      --mid-grey:   #e8e6e2;
+      --text-dark:  #111110;
+      --text-mid:   #555550;
+      --text-light: #888880;
+      --white:      #ffffff;
+      --shadow:     0 4px 32px rgba(0,0,0,.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--teal);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .875rem;
+      font-weight: 500;
+      padding: 13px 26px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+    }
+    .btn-primary:hover { background: var(--teal-light); transform: translateY(-1px); }
+
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--text-dark);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .875rem;
+      font-weight: 500;
+      padding: 12px 26px;
+      border-radius: 4px;
+      border: 1.5px solid #c8c6c2;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color .2s, color .2s, transform .15s;
+    }
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-1px); }
+
+    /* ─── SCROLL ANIMATIONS ───────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.slide-left  { transform: translateX(-30px); }
+    .reveal.slide-right { transform: translateX(30px); }
+    .reveal.visible {
+      opacity: 1;
+      transform: translate(0);
+    }
+
+    /* ─── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,.08); }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+    .nav-logo-icon {
+      width: 28px; height: 28px;
+      background: var(--teal);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-icon span {
+      color: white;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: .7rem;
+      letter-spacing: -.5px;
+    }
+    .nav-logo-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: .95rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: .82rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--text-mid);
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      transition: color .2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 1.5px;
+      background: var(--teal);
+      transform: scaleX(0);
+      transition: transform .2s;
+    }
+    .nav-links a:hover { color: var(--text-dark); }
+    .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+    .nav-links a.active { color: var(--text-dark); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--text-dark);
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      background: white;
+      padding: 16px 32px 24px;
+      border-top: 1px solid var(--mid-grey);
+      gap: 4px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: .9rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--text-mid);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--mid-grey);
+      transition: color .2s;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--teal); }
+    .mobile-menu .btn-primary { margin-top: 12px; text-align: center; }
+
+    /* ─── PAGE HERO ───────────────────────────────────── */
+    #page-hero {
+      padding-top: 64px;
+      min-height: 60vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 64px;
+      background: var(--white);
+    }
+    .page-hero-left {
+      padding: 80px 0 80px 32px;
+      margin-left: calc((100vw - 1100px) / 2);
+    }
+    .page-hero-eyebrow {
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 20px;
+    }
+    .page-hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -.03em;
+      margin-bottom: 20px;
+    }
+    .page-hero-title .teal { color: var(--teal); }
+    .page-hero-sub {
+      font-size: 1rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+      max-width: 440px;
+    }
+    .page-hero-right {
+      padding-right: 32px;
+      margin-right: calc((100vw - 1100px) / 2);
+    }
+    .page-hero-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, #f5e6d3 0%, #e8d4bb 50%, #dcc4a8 100%);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .page-hero-left { animation: fadeUp .7s .1s both; }
+    .page-hero-right { animation: fadeUp .7s .3s both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── MISSION VISION ─────────────────────────────── */
+    #mission-vision {
+      background: var(--off-white);
+      padding: 100px 0;
+    }
+    .mv-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+    }
+    .mv-card {
+      background: white;
+      border-radius: 10px;
+      padding: 48px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.04);
+    }
+    .mv-icon {
+      width: 48px; height: 48px;
+      margin-bottom: 24px;
+      color: var(--teal);
+    }
+    .mv-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      letter-spacing: -.01em;
+    }
+    .mv-desc {
+      font-size: .95rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    /* ─── VALUES ─────────────────────────────────────── */
+    #values {
+      background: var(--white);
+      padding: 100px 0;
+    }
+    .values-header {
+      max-width: 600px;
+      margin-bottom: 64px;
+    }
+    .section-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      letter-spacing: -.02em;
+    }
+    .section-sub {
+      font-size: .95rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+    .section-badge {
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .value-card {
+      background: var(--off-white);
+      border-radius: 10px;
+      padding: 36px;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .value-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 40px rgba(0,0,0,.08);
+    }
+    .value-card.dark {
+      background: var(--teal);
+      color: white;
+    }
+    .value-card.dark .value-title { color: white; }
+    .value-card.dark .value-desc { color: rgba(255,255,255,.75); }
+
+    .value-num {
+      font-size: 2.5rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      color: rgba(13,92,84,.15);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .value-card.dark .value-num { color: rgba(255,255,255,.15); }
+
+    .value-icon {
+      width: 32px; height: 32px;
+      margin-bottom: 16px;
+      color: var(--teal);
+    }
+    .value-card.dark .value-icon { color: rgba(255,255,255,.8); }
+
+    .value-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+      letter-spacing: -.01em;
+    }
+    .value-desc {
+      font-size: .88rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+    }
+
+    /* ─── QUOTE SECTION ─────────────────────────────── */
+    #quote {
+      background: var(--teal-dark);
+      padding: 100px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #quote::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(26,122,112,.15) 0%, transparent 70%);
+    }
+    .quote-content {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .quote-icon {
+      width: 56px; height: 56px;
+      margin: 0 auto 24px;
+      color: var(--teal-light);
+    }
+    .quote-text {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: white;
+      line-height: 1.4;
+      margin-bottom: 20px;
+      letter-spacing: -.02em;
+    }
+    .quote-author {
+      font-size: .88rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.5);
+    }
+
+    /* ─── TECH EMPATHY ──────────────────────────────── */
+    #tech-empathy {
+      background: var(--off-white);
+      padding: 100px 0;
+    }
+    .te-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .te-img-wrap {
+      position: relative;
+    }
+    .te-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(135deg, #0a3a42 0%, #1a5a62 60%, #0d4850 100%);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .te-content {}
+    .te-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 32px;
+      letter-spacing: -.02em;
+    }
+    .te-heading .teal { color: var(--teal); }
+
+    .te-features {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .te-feature {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .te-icon {
+      width: 40px; height: 40px; min-width: 40px;
+      background: var(--mid-grey);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .te-icon svg { width: 20px; height: 20px; color: var(--teal); }
+    .te-feature-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .te-feature-desc {
+      font-size: .88rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* ─── CTA ───────────────────────────────────────── */
+    #cta {
+      background: var(--white);
+      padding: 100px 0;
+    }
+    .cta-inner {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--mid-grey);
+      padding: 56px 0 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+    .footer-tagline {
+      font-size: .82rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+    .footer-col-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 16px;
+      color: var(--text-dark);
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a {
+      font-size: .85rem;
+      color: var(--text-mid);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--teal); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid var(--mid-grey);
+      font-size: .78rem;
+      color: var(--text-light);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 900px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+
+      #page-hero {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .page-hero-left {
+        padding: 60px 32px 0;
+        margin-left: 0;
+      }
+      .page-hero-right {
+        padding: 0 32px 60px;
+        margin-right: 0;
+      }
+
+      .mv-grid { grid-template-columns: 1fr; }
+      .values-grid { grid-template-columns: 1fr; }
+      .te-grid { grid-template-columns: 1fr; }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 0 20px; }
+      .nav-inner { padding: 0 20px; }
+      .mobile-menu { padding: 16px 20px 24px; }
+
+      .page-hero-left { padding: 48px 20px 0; }
+      .page-hero-right { padding: 0 20px 48px; }
+
+      #mission-vision, #values, #quote, #tech-empathy, #cta { padding: 72px 0; }
+
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────────────── -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="../" class="nav-logo">
+       <img src="../images/ini-logo-1.png" width="100">
+    </a>
+    <ul class="nav-links">
+      <li><a href="../">Home</a></li>
+      <li><a href="#" class="active">About Us</a></li>
+      <li><a href="../services/">Our Services</a></li>
+      <li><a href="../contact-us/">Contact Us</a></li>
+    </ul>
+    <a href="../contact-us/" class="btn-primary nav-cta">Get a Free Consultation</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="../">Home</a>
+    <a href="../about-us/">About Us</a>
+    <a href="../services/">Our Services</a>
+    <a href="../contact-us/">Contact Us</a>
+    <a href="../contact-us/" class="btn-primary">Get a Free Consultation</a>
+  </div>
+</nav>
+
+<!-- ─── PAGE HERO ─────────────────────────────────────── -->
+<section id="page-hero">
+  <div class="page-hero-left">
+    <p class="page-hero-eyebrow">The Human Side of Tech</p>
+    <h1 class="page-hero-title">Bridging<br>Innovation with<br><span class="teal">Integrity.</span></h1>
+    <p class="page-hero-sub">At IniWorks Ltd, we don't just build systems; we architect legacies. We believe technology is most powerful when it amplifies human empathy.</p>
+  </div>
+  <div class="page-hero-right">
+    <div class="page-hero-img"></div>
+  </div>
+</section>
+
+<!-- ─── MISSION & VISION ──────────────────────────────── -->
+<section id="mission-vision">
+  <div class="container">
+    <div class="mv-grid">
+      <div class="mv-card reveal">
+        <svg class="mv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <h2 class="mv-title">Our Mission</h2>
+        <p class="mv-desc">To empower businesses with integrated tech solutions that drive sustainable growth, efficiency, and human-centric outcomes across the African continent and beyond.</p>
+      </div>
+
+      <div class="mv-card reveal" style="transition-delay:.1s">
+        <svg class="mv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <h2 class="mv-title">Our Vision</h2>
+        <p class="mv-desc">To be the leading architect of digital transformation in Africa, recognized for our commitment to excellence, empathy, and the pursuit of technological mastery.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── VALUES ────────────────────────────────────────── -->
+<section id="values">
+  <div class="container">
+    <div class="values-header reveal">
+      <p class="section-badge">Since 2024</p>
+      <h2 class="section-heading">Built on Values</h2>
+      <p class="section-sub">Our foundation is built on principles that prioritize long-term impact over short-term gains.</p>
+    </div>
+
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <div class="value-num">01</div>
+        <svg class="value-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <h3 class="value-title">Innovation</h3>
+        <p class="value-desc">Pushing boundaries through creative technical architecture and forward-thinking logic.</p>
+      </div>
+
+      <div class="value-card dark reveal" style="transition-delay:.1s">
+        <div class="value-num">02</div>
+        <svg class="value-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <h3 class="value-title">Integrity</h3>
+        <p class="value-desc">Honesty is our default setting. We build trust through radical transparency and reliable results.</p>
+      </div>
+
+      <div class="value-card reveal" style="transition-delay:.2s">
+        <div class="value-num">03</div>
+        <svg class="value-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        <h3 class="value-title">Excellence</h3>
+        <p class="value-desc">Precision in every line of code. Polish in every user interaction. We do not settle for "good enough".</p>
+      </div>
+
+      <div class="value-card reveal" style="transition-delay:.3s">
+        <div class="value-num">04</div>
+        <svg class="value-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <h3 class="value-title">Empathy</h3>
+        <p class="value-desc">We listen before we build. Your business goals are the heartbeat of our technical solutions.</p>
+      </div>
+
+      <div class="value-card reveal" style="transition-delay:.4s">
+        <div class="value-num">05</div>
+        <svg class="value-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        <h3 class="value-title">Reliability</h3>
+        <p class="value-desc">Systems that stand the test of scale and time. We are the partners you can count on in every storm.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── QUOTE ─────────────────────────────────────────── -->
+<section id="quote">
+  <div class="container">
+    <div class="quote-content reveal">
+      <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/>
+      </svg>
+      <p class="quote-text">"Technology without empathy is just noise. We provide the signal."</p>
+      <p class="quote-author">IniWorks Leadership</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TECH EMPATHY ──────────────────────────────────── -->
+<section id="tech-empathy">
+  <div class="container">
+    <div class="te-grid">
+      <div class="te-img-wrap reveal slide-left">
+        <div class="te-img"></div>
+      </div>
+
+      <div class="te-content reveal slide-right">
+        <h2 class="te-heading">Technology Powered by <span class="teal">Empathy.</span></h2>
+        
+        <div class="te-features">
+          <div class="te-feature">
+            <div class="te-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div>
+              <div class="te-feature-title">Psychology of Scale</div>
+              <div class="te-feature-desc">We study user behavior to ensure our technical systems feel natural and intuitive to the humans using them.</div>
+            </div>
+          </div>
+
+          <div class="te-feature">
+            <div class="te-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="te-feature-title">African Identity</div>
+              <div class="te-feature-desc">Born and bred for the continent. We understand the unique challenges and vast opportunities of the African digital landscape.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ───────────────────────────────────────────── -->
+<section id="cta">
+  <div class="container">
+    <div class="cta-inner reveal">
+      <a href="#" class="btn-primary">Join Our Mission</a>
+      <a href="#" class="btn-outline">Meet The Team</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../" class="footer-logo">
+          <!--<div class="nav-logo-icon"><span>Ini</span></div>
+          <span class="nav-logo-text">IniWorks Ltd</span>-->
+          <img src="../images/ini-logo-1.png" width="120">
+        </a>
+        <p class="footer-tagline"> IniWorks Ltd. Empathy-driven insights.<br>Technology-powered systems. Results-focused solutions.</p>
+      </div>
+      <div>
+        <p class="footer-col-title">Quick Links</p>
+        <ul class="footer-links">
+          <li><a href="../about-us/">About Us</a></li>
+          <li><a href="../services/">Our Services</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Legal</p>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Connect</p>
+        <ul class="footer-links">
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+        <p class="" style="margin-top:16px">Based in Lagos, Nigeria.<br>Operating Globally.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <script type="text/javascript">var year = new Date();document.write(year.getFullYear());</script>  IniWorks Ltd. All rights reserved.</span>
+      <span>Empathy · Technology · Solutions</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

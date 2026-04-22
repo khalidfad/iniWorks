@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Services — IniWorks Ltd</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:       #0d5c54;
+      --teal-dark:  #094740;
+      --teal-light: #1a7a70;
+      --off-white:  #f4f3f0;
+      --mid-grey:   #e8e6e2;
+      --text-dark:  #111110;
+      --text-mid:   #555550;
+      --text-light: #888880;
+      --white:      #ffffff;
+      --shadow:     0 4px 32px rgba(0,0,0,.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--teal);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .875rem;
+      font-weight: 500;
+      padding: 13px 26px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+    }
+    .btn-primary:hover { background: var(--teal-light); transform: translateY(-1px); }
+
+    /* ─── SCROLL ANIMATIONS ───────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.slide-left  { transform: translateX(-30px); }
+    .reveal.slide-right { transform: translateX(30px); }
+    .reveal.visible {
+      opacity: 1;
+      transform: translate(0);
+    }
+
+    /* ─── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,.08); }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+    .nav-logo-icon {
+      width: 28px; height: 28px;
+      background: var(--teal);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-icon span {
+      color: white;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: .7rem;
+      letter-spacing: -.5px;
+    }
+    .nav-logo-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: .95rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: .82rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--text-mid);
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      transition: color .2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 1.5px;
+      background: var(--teal);
+      transform: scaleX(0);
+      transition: transform .2s;
+    }
+    .nav-links a:hover { color: var(--text-dark); }
+    .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+    .nav-links a.active { color: var(--text-dark); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--text-dark);
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      background: white;
+      padding: 16px 32px 24px;
+      border-top: 1px solid var(--mid-grey);
+      gap: 4px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: .9rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--text-mid);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--mid-grey);
+      transition: color .2s;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a:hover { color: var(--teal); }
+    .mobile-menu .btn-primary { margin-top: 12px; text-align: center; }
+
+    /* ─── PAGE HERO ───────────────────────────────────── */
+    #page-hero {
+      padding-top: 64px;
+      min-height: 60vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 64px;
+      background: var(--white);
+    }
+    .page-hero-left {
+      padding: 80px 0 80px 32px;
+      margin-left: calc((100vw - 1100px) / 2);
+    }
+    .page-hero-eyebrow {
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 20px;
+    }
+    .page-hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -.03em;
+      margin-bottom: 20px;
+    }
+    .page-hero-title .teal { color: var(--teal); }
+    .page-hero-sub {
+      font-size: 1rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+      max-width: 440px;
+    }
+    .page-hero-right {
+      padding-right: 32px;
+      margin-right: calc((100vw - 1100px) / 2);
+    }
+    .page-hero-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, #1a2a38 0%, #0d3d50 60%, #072030 100%);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .page-hero-img::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(13,92,84,.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(13,92,84,.15) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .page-hero-left { animation: fadeUp .7s .1s both; }
+    .page-hero-right { animation: fadeUp .7s .3s both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── BPR SECTION ─────────────────────────────────── */
+    #bpr {
+      background: var(--off-white);
+      padding: 100px 0;
+    }
+    .bpr-header {
+      max-width: 600px;
+      margin-bottom: 64px;
+    }
+    .section-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      letter-spacing: -.02em;
+    }
+    .section-sub {
+      font-size: .95rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    .bpr-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    .bpr-card {
+      background: white;
+      border-radius: 10px;
+      padding: 36px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.04);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .bpr-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0,0,0,.1);
+    }
+    .bpr-num {
+      width: 48px; height: 48px;
+      background: var(--mid-grey);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .bpr-num svg {
+      width: 24px;
+      height: 24px;
+      color: var(--teal);
+    }
+    .bpr-card-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+    .bpr-card-desc {
+      font-size: .88rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+    }
+
+    /* ─── TECH PRECISION ─────────────────────────────── */
+    #tech {
+      background: var(--white);
+      padding: 100px 0;
+    }
+    .tech-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 64px;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .tech-card {
+      background: var(--off-white);
+      border-radius: 10px;
+      padding: 40px;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .tech-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 40px rgba(0,0,0,.08);
+    }
+    .tech-card.dark {
+      background: var(--teal);
+      color: white;
+    }
+    .tech-card.dark .tech-card-title { color: white; }
+    .tech-card.dark .tech-card-desc { color: rgba(255,255,255,.75); }
+
+    .tech-card-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      letter-spacing: -.01em;
+    }
+    .tech-card-desc {
+      font-size: .92rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    /* ─── DELIVERY MODEL ─────────────────────────────── */
+    #delivery {
+      background: var(--text-dark);
+      padding: 100px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    #delivery::before {
+      content: '';
+      position: absolute;
+      left: -100px; bottom: -100px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(26,122,112,.15) 0%, transparent 70%);
+    }
+
+    .delivery-header {
+      max-width: 640px;
+      margin-bottom: 64px;
+    }
+    .delivery-header .section-heading {
+      color: white;
+    }
+    .delivery-header .section-heading .teal {
+      color: var(--teal-light);
+    }
+    .delivery-header .section-sub {
+      color: rgba(255,255,255,.6);
+    }
+
+    .delivery-steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 28px;
+    }
+    .step {
+      position: relative;
+    }
+    .step-num {
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      color: rgba(255,255,255,.3);
+      margin-bottom: 16px;
+    }
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: white;
+      margin-bottom: 10px;
+    }
+    .step-desc {
+      font-size: .85rem;
+      color: rgba(255,255,255,.5);
+      line-height: 1.6;
+    }
+
+    /* ─── INDUSTRIES ─────────────────────────────────── */
+    #industries {
+      background: var(--off-white);
+      padding: 100px 0;
+    }
+    .industries-header {
+      margin-bottom: 48px;
+    }
+    .industries-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .industry-card {
+      position: relative;
+      height: 300px;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform .3s;
+    }
+    .industry-card:hover { transform: scale(1.02); }
+    .industry-card.large {
+      grid-row: span 2;
+      height: auto;
+    }
+    .industry-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: linear-gradient(135deg, #0a1a2e 0%, #1a3a50 60%, #0d2838 100%);
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      padding: 32px;
+    }
+    .industry-img::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 60%);
+    }
+    .industry-content {
+      position: relative;
+      z-index: 2;
+    }
+    .industry-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: white;
+      margin-bottom: 6px;
+    }
+    .industry-desc {
+      font-size: .88rem;
+      color: rgba(255,255,255,.75);
+      line-height: 1.5;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--mid-grey);
+      padding: 56px 0 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+    .footer-tagline {
+      font-size: .82rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+    .footer-col-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 16px;
+      color: var(--text-dark);
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a {
+      font-size: .85rem;
+      color: var(--text-mid);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--teal); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid var(--mid-grey);
+      font-size: .78rem;
+      color: var(--text-light);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 900px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+
+      #page-hero {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .page-hero-left {
+        padding: 60px 32px 0;
+        margin-left: 0;
+      }
+      .page-hero-right {
+        padding: 0 32px 60px;
+        margin-right: 0;
+      }
+
+      .bpr-grid { grid-template-columns: 1fr; }
+      .tech-grid { grid-template-columns: 1fr; }
+      .delivery-steps { grid-template-columns: 1fr; }
+      .industries-grid { grid-template-columns: 1fr; }
+      .industry-card.large { grid-row: span 1; }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 0 20px; }
+      .nav-inner { padding: 0 20px; }
+      .mobile-menu { padding: 16px 20px 24px; }
+
+      .page-hero-left { padding: 48px 20px 0; }
+      .page-hero-right { padding: 0 20px 48px; }
+
+      #bpr, #tech, #delivery, #industries { padding: 72px 0; }
+
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────────────── -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="../" class="nav-logo">
+       <img src="../images/ini-logo-1.png" width="100">
+    </a>
+    <ul class="nav-links">
+      <li><a href="../">Home</a></li>
+      <li><a href="../about-us/" >About Us</a></li>
+      <li><a href="#" class="active">Our Services</a></li>
+      <li><a href="../contact-us/">Contact Us</a></li>
+    </ul>
+    <a href="../contact-us/" class="btn-primary nav-cta">Get a Free Consultation</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="../">Home</a>
+    <a href="../about-us/">About Us</a>
+    <a href="#">Our Services</a>
+    <a href="../contact-us/">Contact Us</a>
+    <a href="../contact-us/" class="btn-primary">Get a Free Consultation</a>
+  </div>
+</nav>
+
+<!-- ─── PAGE HERO ─────────────────────────────────────── -->
+<section id="page-hero">
+  <div class="page-hero-left">
+    <p class="page-hero-eyebrow">Architecting Excellence</p>
+    <h1 class="page-hero-title">Precision<br>Engineering<br>Meets <span class="teal">Empathy</span></h1>
+    <p class="page-hero-sub">We don't just build systems; we design the structural integrity of your business future. Experience the fusion of technical mastery and human-centric process design.</p>
+  </div>
+  <div class="page-hero-right">
+    <div class="page-hero-img"></div>
+  </div>
+</section>
+
+<!-- ─── BUSINESS PROCESS REENGINEERING ───────────────── -->
+<section id="bpr">
+  <div class="container">
+    <div class="bpr-header reveal">
+      <h2 class="section-heading">Business Process<br>Reengineering</h2>
+      <p class="section-sub">Modernizing the core of your operational DNA. We strip away legacy friction to reveal the streamlined potential of your organization.</p>
+    </div>
+
+    <div class="bpr-grid">
+      <div class="bpr-card reveal">
+        <div class="bpr-num">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3v18h18"/>
+            <path d="M18 17V9"/>
+            <path d="M13 17V5"/>
+            <path d="M8 17v-3"/>
+          </svg>
+        </div>
+        <h3 class="bpr-card-title">SIPOC Framework</h3>
+        <p class="bpr-card-desc">A high-level view of your Suppliers, Inputs, Processes, Outputs, and Customers to identify core value chains.</p>
+      </div>
+
+      <div class="bpr-card reveal" style="transition-delay:.1s">
+        <div class="bpr-num">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <h3 class="bpr-card-title">SOP Development</h3>
+        <p class="bpr-card-desc">Creating rigid yet adaptable Standard Operating Procedures that ensure consistency across global operations.</p>
+      </div>
+
+      <div class="bpr-card reveal" style="transition-delay:.2s">
+        <div class="bpr-num">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M3 12h3m15 0h-3M12 3v3m0 15v-3"/>
+            <path d="M7.05 7.05l2.12 2.12m8.48 0l2.12-2.12M7.05 16.95l2.12-2.12m8.48 0l2.12 2.12"/>
+          </svg>
+        </div>
+        <h3 class="bpr-card-title">Process Mapping</h3>
+        <p class="bpr-card-desc">Granular visualization of every touchpoint to eliminate bottlenecks and automate redundant workflows.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TECHNOLOGICAL PRECISION ──────────────────────── -->
+<section id="tech">
+  <div class="container">
+    <div class="tech-header reveal">
+      <h2 class="section-heading">Technological Precision</h2>
+      <p class="section-sub">Comprehensive digital solutions designed to integrate seamlessly into your unique business architecture.</p>
+    </div>
+
+    <div class="tech-grid">
+      <div class="tech-card reveal">
+        <h3 class="tech-card-title">ERP Implementation</h3>
+        <p class="tech-card-desc">Centralizing your data intelligence with enterprise-grade resource planning that grows with your vision.</p>
+      </div>
+
+      <div class="tech-card dark reveal" style="transition-delay:.1s">
+        <h3 class="tech-card-title">Bespoke Software</h3>
+        <p class="tech-card-desc">Custom-coded solutions for challenges that off-the-shelf software can't touch.</p>
+      </div>
+
+      <div class="tech-card reveal" style="transition-delay:.2s">
+        <h3 class="tech-card-title">IT Consulting</h3>
+        <p class="tech-card-desc">Strategic roadmaps that align your tech stack with long-term business KPIs.</p>
+      </div>
+
+      <div class="tech-card reveal" style="transition-delay:.3s">
+        <h3 class="tech-card-title">System Integration</h3>
+        <p class="tech-card-desc">Connecting disparate ecosystems into a single, unified source of truth.</p>
+      </div>
+
+      <div class="tech-card dark reveal" style="transition-delay:.4s">
+        <h3 class="tech-card-title">Support & Maintenance</h3>
+        <p class="tech-card-desc">24/7 proactive monitoring to ensure your infrastructure never sleeps.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 5-STEP DELIVERY MODEL ────────────────────────── -->
+<section id="delivery">
+  <div class="container">
+    <div class="delivery-header reveal">
+      <h2 class="section-heading">The 5-Step<br><span class="teal">Delivery Model</span></h2>
+      <p class="section-sub">Our methodology is rigorous and repeatable, ensuring excellence is not an accident, but a structural outcome.</p>
+    </div>
+
+    <div class="delivery-steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <h3 class="step-title">Discovery</h3>
+        <p class="step-desc">Deep immersion into your current state to identify latent opportunities.</p>
+      </div>
+
+      <div class="step reveal" style="transition-delay:.1s">
+        <div class="step-num">02</div>
+        <h3 class="step-title">Mapping</h3>
+        <p class="step-desc">Visualizing the future architecture of your operational flows.</p>
+      </div>
+
+      <div class="step reveal" style="transition-delay:.2s">
+        <div class="step-num">03</div>
+        <h3 class="step-title">Optimization</h3>
+        <p class="step-desc">Refining processes for peak efficiency before the first line of code.</p>
+      </div>
+
+      <div class="step reveal" style="transition-delay:.3s">
+        <div class="step-num">04</div>
+        <h3 class="step-title">Implementation</h3>
+        <p class="step-desc">Precision deployment of systems with zero operational downtime.</p>
+      </div>
+
+      <div class="step reveal" style="transition-delay:.4s">
+        <div class="step-num">05</div>
+        <h3 class="step-title">Training</h3>
+        <p class="step-desc">Empowering your team to master and evolve their new digital tools.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── INDUSTRIES ────────────────────────────────────── -->
+<section id="industries">
+  <div class="container">
+    <div class="industries-header reveal">
+      <h2 class="section-heading">Industries of Focus</h2>
+    </div>
+
+    <div class="industries-grid">
+      <div class="industry-card large reveal">
+        <div class="industry-img">
+          <div class="industry-content">
+            <h3 class="industry-title">Manufacturing</h3>
+            <p class="industry-desc">Optimizing shop floors and supply chains with Industry 4.0.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="industry-card reveal" style="transition-delay:.1s">
+        <div class="industry-img">
+          <div class="industry-content">
+            <h3 class="industry-title">Real Estate</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="industry-card reveal" style="transition-delay:.2s">
+        <div class="industry-img">
+          <div class="industry-content">
+            <h3 class="industry-title">FMCG</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="industry-card reveal" style="transition-delay:.3s">
+        <div class="industry-img">
+          <div class="industry-content">
+            <h3 class="industry-title">Financial Services</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../" class="footer-logo">
+          <!--<div class="nav-logo-icon"><span>Ini</span></div>
+          <span class="nav-logo-text">IniWorks Ltd</span>-->
+          <img src="../images/ini-logo-1.png" width="120">
+        </a>
+        <p class="footer-tagline"> IniWorks Ltd. Empathy-driven insights.<br>Technology-powered systems. Results-focused solutions.</p>
+      </div>
+      <div>
+        <p class="footer-col-title">Quick Links</p>
+        <ul class="footer-links">
+          <li><a href="../about-us/">About Us</a></li>
+          <li><a href="../services/">Our Services</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Legal</p>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Connect</p>
+        <ul class="footer-links">
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+        <p class="" style="margin-top:16px">Based in Lagos, Nigeria.<br>Operating Globally.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <script type="text/javascript">var year = new Date();document.write(year.getFullYear());</script>  IniWorks Ltd. All rights reserved.</span>
+      <span>Empathy · Technology · Solutions</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
