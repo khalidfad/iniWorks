@@ -1126,6 +1126,7 @@
     .stat-card .stat-text {
       color: var(--text-mid);
     }
+    
 
     /* ─── RESPONSIVE ─────────────────────────────────── */
     @media (max-width: 900px) {
